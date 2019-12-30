@@ -6,8 +6,12 @@ namespace TightCoupleLooseCoupleDIExample
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("TightCouple Example");
-            User user = new User();
+            // this becomes a Loosely Coupled example
+            Console.WriteLine("Loosely Coupled Example");
+
+            // since we've changed the User class constructor, 
+            // we must pass in an instantiated MSSqlServerDatabase object
+            User user = new User(new MSSqlServerDatabase());
             user.Add("This is user data");
         }
 
@@ -15,11 +19,11 @@ namespace TightCoupleLooseCoupleDIExample
         {
             MSSqlServerDatabase _database;
 
-            public User()
+            // passing the database object to the User constructor
+            // is Dependency Injection!!!
+            public User(MSSqlServerDatabase database)
             {
-                // instantiating MSSqlServerDatabase here makes the 
-                // User class tightly coupled to MSSqlServerDatabase class
-                _database = new MSSqlServerDatabase();
+                _database = database;
             }
             public void Add(string data)
             {
