@@ -13,20 +13,21 @@ namespace TightCoupleLooseCoupleDIExample
             // we must pass in an instantiated MSSqlServerDatabase object
 
             // changing this to MongoDBServerDatabase
-            User user = new User(new MongoDBServerDatabase());
+            // switching between MSSQL Class and Mongo Class is fairly easy now
+            User user = new User(new MSSqlServerDatabase());
             user.Add("This is user data");
         }
 
         public class User
         {
-            // changing this to MongoDBServerDatabase
-            MongoDBServerDatabase _database;
+            // changing this to Generic Interface
+            IDatabase _database;
 
             // passing the database object to the User constructor
             // is Dependency Injection!!!
 
-            // changing this to MongoDBServerDatabase
-            public User(MongoDBServerDatabase database)
+            // changing this to Generic Interface
+            public User(IDatabase database)
             {
                 _database = database;
             }
@@ -36,7 +37,14 @@ namespace TightCoupleLooseCoupleDIExample
             }
         }
 
-        public class MSSqlServerDatabase
+        // our Generic interface
+        public interface IDatabase
+        {
+            public void Persist(string data);
+        }
+
+        // changing this class to inherit Generic Interface
+        public class MSSqlServerDatabase : IDatabase
         {
             public void Persist(string data)
             {
@@ -47,7 +55,8 @@ namespace TightCoupleLooseCoupleDIExample
         }
 
         // adding a different class to handle db stuff
-        public class MongoDBServerDatabase
+        // changing this class to inherit Generic Interface
+        public class MongoDBServerDatabase : IDatabase
         {
             public void Persist(string data)
             {
